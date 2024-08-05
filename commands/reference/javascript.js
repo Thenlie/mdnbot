@@ -1,5 +1,11 @@
-import { SlashCommandBuilder } from 'discord.js';
-import { jsTitles } from 'jsman'
+import { EmbedBuilder, SlashCommandBuilder } from 'discord.js';
+import { jsTitles, getMDNFile } from 'jsman'
+import { getSection, getHeader } from 'jsman/dist/parser/index.js';
+
+const truncateString = (str) => {
+    const MAX_LENGTH = 1024;
+    return str.length > MAX_LENGTH ? str.slice(0, MAX_LENGTH - 3) + '...' : str;
+}
 
 const createChoicesFromTitle = () => {
 	return jsTitles.map(title => {
@@ -38,8 +44,26 @@ export default {
 	async execute(interaction) {
 		// interaction.user is the object representing the User who ran the command
 		// interaction.member is the GuildMember object, which represents the user in the specific guild
-		console.log(JSON.stringify(interaction.options))
-		await interaction.reply(`This command was run by ${interaction.user.username}, who joined on ${interaction.member.joinedAt}.`);
-		// await interaction.reply(response)
+		console.log(JSON.stringify(interaction.options._hoistedOptions[0].value))
+        const file = getMDNFile(interaction.options._hoistedOptions[0].value)
+        const params = getSection('Parameters', file);
+        const header = getHeader(file);
+        // let reply;
+        // if (header) {
+        //     reply = header.title + params
+        // } else {
+        //     reply = params
+        // }
+		// await interaction.reply(reply);
+ 
+        const exampleEmbed = new EmbedBuilder()
+            .setColor(0x0099FF)
+            .setTitle(header.title)
+            .setURL(`https://developer.mozilla.org/en-US/docs/${header.slug}`)
+            .addFields(
+                { name: 'Parameters', value: truncateString(params) },
+            )
+        
+            await interaction.reply({ embeds: [exampleEmbed] });
 	},
 };
