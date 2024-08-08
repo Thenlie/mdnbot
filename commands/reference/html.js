@@ -1,14 +1,14 @@
 import { EmbedBuilder, SlashCommandBuilder } from 'discord.js';
-import { jsTitles, getMDNFile } from 'mdnman'
+import { htmlTitles, getMDNFile } from 'mdnman'
 import { getSection, getHeader, stripJsxRef } from 'mdnman/dist/parser/index.js';
 import { truncateString, createChoicesFromTitles } from '../../utils.js';
 
-const choices = createChoicesFromTitles(jsTitles);
+const choices = createChoicesFromTitles(htmlTitles);
 
 export default {
 	data: new SlashCommandBuilder()
-		.setName('javascript')
-		.setDescription('Search the MDN JavaScript documentation')
+		.setName('html')
+		.setDescription('Search the MDN HTML documentation')
         .addStringOption(option =>
             option.setName('section')
                 .setDescription('Which section of the MDN document to return')
@@ -19,8 +19,8 @@ export default {
                         value: 'Description'
                     },
                     {
-                        name: 'Parameters',
-                        value: 'Parameters'
+                        name: 'Attributes',
+                        value: 'Attributes'
                     },
                     {
                         name: 'Examples',
@@ -30,7 +30,7 @@ export default {
         )
 		.addStringOption(option => 
 			option.setName('query')
-				.setDescription('JavaScript reference to search for')
+				.setDescription('HTML reference to search for')
 				.setRequired(true)
 				.setAutocomplete(true)
 		),

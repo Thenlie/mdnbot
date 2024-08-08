@@ -12,7 +12,7 @@
   "license": "ISC",
   "dependencies": {
     "discord.js": "^14.15.3",
-    "jsman": "file:../jsman/jsman-1.0.0.tgz"
+    "mdnman": "file:../jsman/mdnman-1.0.0.tgz"
   },
   "devDependencies": {
     "dotenv": "^16.4.5"
