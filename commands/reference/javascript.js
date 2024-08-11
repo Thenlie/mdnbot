@@ -1,6 +1,6 @@
 import { EmbedBuilder, SlashCommandBuilder } from 'discord.js';
 import { jsTitles, getMDNFile } from 'mdnman'
-import { getSection, getHeader, stripJsxRef } from 'mdnman/dist/parser/index.js';
+import { getSection, getHeader, stripJsxRef, expandLinks } from 'mdnman/dist/parser/index.js';
 import { truncateString, createChoicesFromTitles } from '../../utils.js';
 
 const choices = createChoicesFromTitles(jsTitles);
@@ -61,7 +61,7 @@ export default {
         const document = getSection(section, file);
         const header = getHeader(file);
 
-        const strippedDoc = stripJsxRef(document);
+        const strippedDoc = expandLinks(stripJsxRef(document));
  
         const exampleEmbed = new EmbedBuilder()
             .setColor(0x3170D6)
