@@ -1,14 +1,14 @@
 import { EmbedBuilder, SlashCommandBuilder } from 'discord.js';
-import { jsTitles, getMDNFile } from 'mdnman'
-import { getSection, getHeader, stripJsxRef, expandLinks } from 'mdnman/dist/parser/index.js';
+import { htmlTitles, getMDNFile } from 'mdnman'
+import { getSection, getHeader, stripJsxRef, getHtmlDescription, stripHeader, expandLinks } from 'mdnman/dist/parser/index.js';
 import { truncateString, createChoicesFromTitles } from '../../utils.js';
 
-const choices = createChoicesFromTitles(jsTitles);
+const choices = createChoicesFromTitles(htmlTitles);
 
 export default {
 	data: new SlashCommandBuilder()
-		.setName('javascript')
-		.setDescription('Search the MDN JavaScript documentation')
+		.setName('css')
+		.setDescription('Search the MDN CSS documentation')
         .addStringOption(option =>
             option.setName('section')
                 .setDescription('Which section of the MDN document to return')
@@ -19,18 +19,18 @@ export default {
                         value: 'Description'
                     },
                     {
-                        name: 'Parameters',
-                        value: 'Parameters'
+                        name: 'Syntax',
+                        value: 'Syntax'
                     },
                     {
-                        name: 'Examples',
-                        value: 'Examples'
+                        name: 'Values',
+                        value: 'Values'
                     }
                 ])
         )
 		.addStringOption(option => 
 			option.setName('query')
-				.setDescription('JavaScript reference to search for')
+				.setDescription('HTML reference to search for')
 				.setRequired(true)
 				.setAutocomplete(true)
 		),
@@ -55,7 +55,12 @@ export default {
         }
 
         const file = getMDNFile(filepath)
-        const document = getSection(section, file);
+        let document;
+        if (section === 'Description') {
+            document = stripHeader(getHtmlDescription(file));
+        } else {
+            document = getSection(section, file);
+        }
         const header = getHeader(file);
 
         const strippedDoc = expandLinks(stripJsxRef(document));

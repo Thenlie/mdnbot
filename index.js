@@ -70,7 +70,7 @@ client.on(Events.InteractionCreate, async (interaction) => {
     try {
         await command.autocomplete(interaction);
     } catch (error) {
-        console.error(error);
+        console.error('Error in autocomplete!', error);
     }
 });
 

@@ -1,6 +1,6 @@
 import { EmbedBuilder, SlashCommandBuilder } from 'discord.js';
 import { htmlTitles, getMDNFile } from 'mdnman'
-import { getSection, getHeader, stripJsxRef, getHtmlDescription, stripHeader, expandLinks } from 'mdnman/dist/parser/index.js';
+import { getSection, getHeader, stripJsxRef, getHtmlDescription, stripHeader, expandLinks, convertEmojiTags } from 'mdnman/dist/parser/index.js';
 import { truncateString, createChoicesFromTitles } from '../../utils.js';
 
 const choices = createChoicesFromTitles(htmlTitles);
@@ -36,15 +36,12 @@ export default {
 		),
 	async autocomplete(interaction) {
 		const focusedValue = interaction.options.getFocused();
-		let count = 0;
 		const filtered = choices.filter(choice => choice.name.includes(focusedValue));
-		await interaction.respond(
-			filtered.map(choice => {
-				if (count >= 20) return;
-				count++;
-				return { name: choice.name, value: choice.value }
-			}),
-		);
+        // Truncate filtered  array to length of 25 per discord's limit
+        const response = filtered.slice(0, 24).map(choice => {
+            return { name: choice.name, value: choice.value }
+        });
+		await interaction.respond(response);
 	},
 	async execute(interaction) {
         const options = interaction.options._hoistedOptions;
@@ -66,7 +63,7 @@ export default {
         }
         const header = getHeader(file);
 
-        const strippedDoc = expandLinks(stripJsxRef(document));
+        const strippedDoc = convertEmojiTags(expandLinks(stripJsxRef(document)));
  
         const exampleEmbed = new EmbedBuilder()
             .setColor(0x3170D6)
