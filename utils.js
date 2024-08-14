@@ -31,12 +31,10 @@ const truncateString = (str) => {
  * @returns 
  */
 const createChoicesFromTitles = (titles) => {
-	return titles.map(title => {
-		return {
-			name: title.title,
-			value: title.file
-		}
-	})
+	return titles.map(title => ({
+		name: title.title,
+		value: title.file
+	}))
 };
 
 export {

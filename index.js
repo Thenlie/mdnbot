@@ -8,9 +8,6 @@ const __filename = fileURLToPath(import.meta.url);
 const __dirname = dirname(__filename);
 
 const client = new Client({ intents: [GatewayIntentBits.Guilds] });
-
-client.commands = new Collection();
-
 client.commands = new Collection();
 
 const foldersPath = path.join(__dirname, 'commands');
@@ -35,6 +32,7 @@ client.on('ready', () => {
   console.log(`Logged in as ${client.user.tag}!`);
 });
 
+// Command handling
 client.on(Events.InteractionCreate, async interaction => {
 	if (!interaction.isChatInputCommand()) return;
 
