@@ -11,7 +11,7 @@ const removeTitle = (doc) => {
     if (newlineIndex === -1) return doc;
     // Return the substring starting after the second newline
     return doc.substring(newlineIndex + 1);
-}
+};
 
 /**
  * Cuts a string down to the discord character limit if needed
@@ -22,7 +22,7 @@ const removeTitle = (doc) => {
 const truncateString = (str) => {
     const MAX_LENGTH = 1024;
     return str.length > MAX_LENGTH ? str.slice(0, MAX_LENGTH - 3) + '...' : str;
-}
+};
 
 /**
  * Creates and array of objects containing all titles and filepaths
@@ -34,11 +34,11 @@ const createChoicesFromTitles = (titles) => {
 	return titles.map(title => ({
 		name: title.title,
 		value: title.file
-	}))
+	}));
 };
 
 export {
     removeTitle,
     truncateString,
     createChoicesFromTitles
-}
+};

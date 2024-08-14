@@ -1,5 +1,5 @@
 import { EmbedBuilder, SlashCommandBuilder } from 'discord.js';
-import { htmlTitles, getMDNFile } from 'mdnman'
+import { htmlTitles, getMDNFile } from 'mdnman';
 import { getSection, getHeader, stripJsxRef, getHtmlDescription, stripHeader, expandLinks, convertEmojiTags } from 'mdnman/dist/parser/index.js';
 import { truncateString, createChoicesFromTitles } from '../../utils.js';
 
@@ -39,22 +39,22 @@ export default {
 		const filtered = choices.filter(choice => choice.name.includes(focusedValue));
         // Truncate filtered  array to length of 25 per discord's limit
         const response = filtered.slice(0, 24).map(choice => {
-            return { name: choice.name, value: choice.value }
+            return { name: choice.name, value: choice.value };
         });
 		await interaction.respond(response);
 	},
 	async execute(interaction) {
         const options = interaction.options._hoistedOptions;
-        const filepath = options.find(obj => obj.name === 'query').value
-        const section = options.find(obj => obj.name === 'section').value
+        const filepath = options.find(obj => obj.name === 'query').value;
+        const section = options.find(obj => obj.name === 'section').value;
 
         if (!filepath || !section) {
-            console.error(`No filepath or section provided! Filepath: ${filepath}, Section: ${section}`)
-            await interaction.reply()
+            console.error(`No filepath or section provided! Filepath: ${filepath}, Section: ${section}`);
+            await interaction.reply();
             return;
         }
 
-        const file = getMDNFile(filepath)
+        const file = getMDNFile(filepath);
         let document;
         if (section === 'Description') {
             document = stripHeader(getHtmlDescription(file));
@@ -69,7 +69,7 @@ export default {
             .setColor(0x3170D6)
             .setTitle(header.title)
             .setURL(`https://developer.mozilla.org/en-US/docs/${header.slug}`)
-            .setDescription(truncateString(strippedDoc))
+            .setDescription(truncateString(strippedDoc));
         
             await interaction.reply({ embeds: [exampleEmbed] });
 	},
