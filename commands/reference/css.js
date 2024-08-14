@@ -1,9 +1,9 @@
 import { EmbedBuilder, SlashCommandBuilder } from 'discord.js';
-import { htmlTitles, getMDNFile } from 'mdnman'
+import { cssTitles, getMDNFile } from 'mdnman'
 import { getSection, getHeader, stripJsxRef, getHtmlDescription, stripHeader, expandLinks } from 'mdnman/dist/parser/index.js';
 import { truncateString, createChoicesFromTitles } from '../../utils.js';
 
-const choices = createChoicesFromTitles(htmlTitles);
+const choices = createChoicesFromTitles(cssTitles);
 
 export default {
 	data: new SlashCommandBuilder()
@@ -30,7 +30,7 @@ export default {
         )
 		.addStringOption(option => 
 			option.setName('query')
-				.setDescription('HTML reference to search for')
+				.setDescription('CSS reference to search for')
 				.setRequired(true)
 				.setAutocomplete(true)
 		),
