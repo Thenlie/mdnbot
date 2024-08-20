@@ -1,7 +1,17 @@
 import { EmbedBuilder, SlashCommandBuilder } from 'discord.js';
-import { jsTitles, getMDNFile } from 'mdnman';
-import { getSection, getHeader, stripJsxRef, expandLinks } from 'mdnman/dist/parser/index.js';
-import { truncateString, createChoicesFromTitles } from '../../utils.js';
+import {
+    jsTitles,
+    getMDNFile,
+    removeEmptySections,
+    getSection,
+    getHeader,
+    stripJsxRef,
+    expandLinks,
+    removeEmptyLines,
+    truncateString,
+    createChoicesFromTitles,
+    convertEmojiTags
+} from 'mdnman';
 import { autocompleteHandler } from '../../autocomplete.js';
 
 const choices = createChoicesFromTitles(jsTitles);
@@ -50,16 +60,16 @@ export default {
         }
 
         const file = getMDNFile(filepath);
-        const document = getSection(section, file);
+        const document = getSection(file, section);
         const header = getHeader(file);
 
-        const strippedDoc = expandLinks(stripJsxRef(document));
- 
+        const strippedDoc = removeEmptyLines(removeEmptySections(convertEmojiTags(expandLinks(stripJsxRef(document)))));
+
         const exampleEmbed = new EmbedBuilder()
             .setColor(0x3170D6)
             .setTitle(header.title)
             .setURL(`https://developer.mozilla.org/en-US/docs/${header.slug}`)
-            .setDescription(truncateString(strippedDoc));
+            .setDescription(truncateString(strippedDoc, 1024));
         
             await interaction.reply({ embeds: [exampleEmbed] });
 	},

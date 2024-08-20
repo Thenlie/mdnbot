@@ -28,61 +28,6 @@ for (const folder of commandFolders) {
 	}
 }
 
-// const commands = [
-//   {
-//     name: 'ping',
-//     description: 'Replies with Pong!',
-//   },
-//   {
-//     name: 'mdn',
-//     description: 'Query the MDN Web Docs',
-//     type: 1,
-//     options: [
-//       {
-//         name: 'language',
-//         description: 'HTML, CSS or JavaScript',
-//         type: 3,
-//         required: true,
-//         choices: [
-//           {
-//             name: 'JavaScript',
-//             value: 'javascript'
-//           },
-//           {
-//             name: 'HTML',
-//             value: 'html'
-//           },
-//           {
-//             name: 'CSS',
-//             value: 'css'
-//           },
-//         ]
-//       },
-//       {
-//         name: 'query',
-//         description: 'query to search in MDN',
-//         type: 3,
-//         required: true
-//       },
-//     ]
-//   },
-//   {
-//     name: 'javascript',
-//     description: 'Search the MDN JavaScript documentation',
-//     type: 1,
-//     options: [
-//       {
-//         name: 'query',
-//         description: 'JavaScript reference to search for',
-//         type: 3,
-//         required: true,
-//         autocomplete: true
-        
-//       }
-//     ]
-//   }
-// ];
-
 const rest = new REST({ version: '10' }).setToken(process.env.TOKEN);
 
 try {

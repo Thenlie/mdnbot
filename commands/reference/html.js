@@ -1,6 +1,6 @@
 import { EmbedBuilder, SlashCommandBuilder } from 'discord.js';
 import { htmlTitles, getMDNFile } from 'mdnman';
-import { getSection, getHeader, stripJsxRef, getHtmlDescription, stripHeader, expandLinks, convertEmojiTags } from 'mdnman/dist/parser/index.js';
+import { getSection, getHeader, stripJsxRef, getHtmlDescription, stripHeader, expandLinks, convertEmojiTags } from 'mdnman';
 import { truncateString, createChoicesFromTitles } from '../../utils.js';
 
 const choices = createChoicesFromTitles(htmlTitles);
@@ -59,7 +59,7 @@ export default {
         if (section === 'Description') {
             document = stripHeader(getHtmlDescription(file));
         } else {
-            document = getSection(section, file);
+            document = getSection(file, section);
         }
         const header = getHeader(file);
 
