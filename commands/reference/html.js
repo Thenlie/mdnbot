@@ -9,8 +9,9 @@ import {
     stripHeader,
     expandLinks,
     convertEmojiTags,
+    truncateString,
+    createChoicesFromTitles,
 } from 'mdnman';
-import { truncateString, createChoicesFromTitles } from '../../utils.js';
 
 const choices = createChoicesFromTitles(htmlTitles);
 

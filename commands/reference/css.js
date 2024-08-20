@@ -8,8 +8,9 @@ import {
     getHtmlDescription,
     stripHeader,
     expandLinks,
+    truncateString,
+    createChoicesFromTitles,
 } from 'mdnman';
-import { truncateString, createChoicesFromTitles } from '../../utils.js';
 
 const choices = createChoicesFromTitles(cssTitles);
 
