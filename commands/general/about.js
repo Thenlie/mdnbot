@@ -12,7 +12,6 @@ export default {
     async execute(interaction) {
         const embed = new EmbedBuilder()
             .setColor(0x3170d6)
-            // .setTitle('About the MDN Bot')
             .setDescription(description)
             .setFooter({ text: footer });
 
