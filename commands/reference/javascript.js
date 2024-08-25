@@ -71,12 +71,12 @@ export default {
             removeEmptySections(convertEmojiTags(expandLinks(stripJsxRef(document))))
         );
 
-        const exampleEmbed = new EmbedBuilder()
+        const embed = new EmbedBuilder()
             .setColor(0x3170d6)
             .setTitle(header.title)
             .setURL(`https://developer.mozilla.org/en-US/docs/${header.slug}`)
             .setDescription(truncateString(strippedDoc, 1024));
 
-        await interaction.reply({ embeds: [exampleEmbed] });
+        await interaction.reply({ embeds: [embed] });
     },
 };
