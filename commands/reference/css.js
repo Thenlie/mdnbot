@@ -10,6 +10,9 @@ import {
     expandLinks,
     truncateString,
     createChoicesFromTitles,
+    removeEmptyLines,
+    removeEmptySections,
+    convertEmojiTags,
 } from 'mdnman';
 
 const choices = createChoicesFromTitles(cssTitles);
@@ -76,13 +79,15 @@ export default {
         }
         const header = getHeader(file);
 
-        const strippedDoc = expandLinks(stripJsxRef(document));
+        const strippedDoc = removeEmptyLines(
+            removeEmptySections(convertEmojiTags(expandLinks(stripJsxRef(document))))
+        );
 
         const embed = new EmbedBuilder()
             .setColor(0x3170d6)
             .setTitle(header.title)
             .setURL(`https://developer.mozilla.org/en-US/docs/${header.slug}`)
-            .setDescription(truncateString(strippedDoc));
+            .setDescription(truncateString(strippedDoc, 1024));
 
         await interaction.reply({ embeds: [embed] });
     },
