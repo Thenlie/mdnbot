@@ -18,6 +18,10 @@ To start the bot, run:
 node index.js
 ```
 
+## Example
+
+![image](https://github.com/user-attachments/assets/60242bc5-fde8-46b9-b61b-18b77ce1ebcb)
+
 ## Credits
 
 This project would not be possible without the incredible work done by the [Mozilla Team](https://github.com/mdn) on the [MDN Web Docs](https://developer.mozilla.org/en-US/).
