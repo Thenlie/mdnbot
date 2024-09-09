@@ -14,6 +14,7 @@ import {
     removeEmptySections,
     convertEmojiTags,
 } from 'mdnman';
+import { autocompleteHandler } from '../../autocomplete';
 
 const choices = createChoicesFromTitles(cssTitles);
 
@@ -49,13 +50,7 @@ export default {
                 .setAutocomplete(true)
         ),
     async autocomplete(interaction) {
-        const focusedValue = interaction.options.getFocused();
-        const filtered = choices.filter((choice) => choice.name.includes(focusedValue));
-        // Truncate filtered  array to length of 25 per discord's limit
-        const response = filtered.slice(0, 24).map((choice) => {
-            return { name: choice.name, value: choice.value };
-        });
-        await interaction.respond(response);
+        await autocompleteHandler(interaction, choices);
     },
     async execute(interaction) {
         const options = interaction.options._hoistedOptions;
