@@ -14,7 +14,7 @@ import {
     removeEmptySections,
     convertEmojiTags,
 } from 'mdnman';
-import { autocompleteHandler } from '../../autocomplete';
+import { autocompleteHandler } from '../../autocomplete.js';
 
 const choices = createChoicesFromTitles(cssTitles);
 
