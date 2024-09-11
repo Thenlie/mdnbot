@@ -13,6 +13,8 @@ export const queryAutocompleteHandler = async (interaction, choices) => {
     await interaction.respond(response);
 };
 
+const SECTIONS_TO_REMOVE = ['See also', 'Browser compatibility', 'Specifications'];
+
 export const sectionAutocompleteHandler = async (interaction) => {
     const options = interaction.options._hoistedOptions;
     const filepath = options.find((obj) => obj.name === 'query').value;
@@ -21,7 +23,12 @@ export const sectionAutocompleteHandler = async (interaction) => {
     }
     const file = getMDNFile(filepath);
     const sections = getAllSections(removeEmptySections(file));
+
+    const filteredSections = sections.filter(
+        (section) => !SECTIONS_TO_REMOVE.includes(section.name)
+    );
+
     await interaction.respond(
-        sections.map((section) => ({ name: section.name, value: section.name }))
+        filteredSections.map((section) => ({ name: section.name, value: section.name }))
     );
 };

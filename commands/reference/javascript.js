@@ -1,6 +1,6 @@
 import { EmbedBuilder, SlashCommandBuilder } from 'discord.js';
 import {
-    jsTitles,
+    javascriptTitles,
     getMDNFile,
     removeEmptySections,
     getSection,
@@ -14,7 +14,7 @@ import {
 } from 'mdnman';
 import { queryAutocompleteHandler, sectionAutocompleteHandler } from '../../autocomplete.js';
 
-const choices = createChoicesFromTitles(jsTitles);
+const choices = createChoicesFromTitles(javascriptTitles);
 
 export default {
     data: new SlashCommandBuilder()

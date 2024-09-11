@@ -14,7 +14,7 @@ import {
     removeEmptySections,
     convertEmojiTags,
 } from 'mdnman';
-import { autocompleteHandler } from '../../autocomplete.js';
+import { queryAutocompleteHandler, sectionAutocompleteHandler } from '../../autocomplete.js';
 
 const choices = createChoicesFromTitles(cssTitles);
 
@@ -24,33 +24,27 @@ export default {
         .setDescription('Search the MDN CSS documentation')
         .addStringOption((option) =>
             option
-                .setName('section')
-                .setDescription('Which section of the MDN document to return')
-                .setRequired(true)
-                .setChoices([
-                    {
-                        name: 'Description',
-                        value: 'Description',
-                    },
-                    {
-                        name: 'Syntax',
-                        value: 'Syntax',
-                    },
-                    {
-                        name: 'Values',
-                        value: 'Values',
-                    },
-                ])
-        )
-        .addStringOption((option) =>
-            option
                 .setName('query')
                 .setDescription('CSS reference to search for')
                 .setRequired(true)
                 .setAutocomplete(true)
+        )
+        .addStringOption((option) =>
+            option
+                .setName('section')
+                .setDescription('Which section of the MDN document to return')
+                .setRequired(true)
+                .setAutocomplete(true)
         ),
     async autocomplete(interaction) {
-        await autocompleteHandler(interaction, choices);
+        const focusedOption = interaction.options._hoistedOptions.find(
+            (obj) => obj.focused === true
+        );
+        if (focusedOption.name === 'query') {
+            await queryAutocompleteHandler(interaction, choices);
+        } else if (focusedOption.name === 'section') {
+            await sectionAutocompleteHandler(interaction);
+        }
     },
     async execute(interaction) {
         const options = interaction.options._hoistedOptions;
