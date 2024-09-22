@@ -1,20 +1,7 @@
-import { EmbedBuilder, SlashCommandBuilder } from 'discord.js';
-import {
-    htmlTitles,
-    getMDNFile,
-    getSection,
-    getHeader,
-    stripJsxRef,
-    getHtmlDescription,
-    stripHeader,
-    expandLinks,
-    convertEmojiTags,
-    truncateString,
-    createChoicesFromTitles,
-    removeEmptyLines,
-    removeEmptySections,
-} from 'mdnman';
+import { SlashCommandBuilder } from 'discord.js';
+import { htmlTitles, createChoicesFromTitles } from 'mdnman';
 import { queryAutocompleteHandler, sectionAutocompleteHandler } from '../../autocomplete.js';
+import { referenceCommandExecutor } from './utils.js';
 
 const choices = createChoicesFromTitles(htmlTitles);
 
@@ -47,37 +34,6 @@ export default {
         }
     },
     async execute(interaction) {
-        const options = interaction.options._hoistedOptions;
-        const filepath = options.find((obj) => obj.name === 'query').value;
-        const section = options.find((obj) => obj.name === 'section').value;
-
-        if (!filepath || !section) {
-            console.error(
-                `No filepath or section provided! Filepath: ${filepath}, Section: ${section}`
-            );
-            await interaction.reply();
-            return;
-        }
-
-        const file = getMDNFile(filepath);
-        let document;
-        if (section === 'Description') {
-            document = stripHeader(getHtmlDescription(file));
-        } else {
-            document = getSection(file, section);
-        }
-        const header = getHeader(file);
-
-        const strippedDoc = removeEmptyLines(
-            removeEmptySections(convertEmojiTags(expandLinks(stripJsxRef(document))))
-        );
-
-        const embed = new EmbedBuilder()
-            .setColor(0x3170d6)
-            .setTitle(header.title)
-            .setURL(`https://developer.mozilla.org/en-US/docs/${header.slug}`)
-            .setDescription(truncateString(strippedDoc, 1024));
-
-        await interaction.reply({ embeds: [embed] });
+        await referenceCommandExecutor(interaction);
     },
 };

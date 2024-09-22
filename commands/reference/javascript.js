@@ -1,18 +1,7 @@
-import { EmbedBuilder, SlashCommandBuilder } from 'discord.js';
-import {
-    javascriptTitles,
-    getMDNFile,
-    removeEmptySections,
-    getSection,
-    getHeader,
-    stripJsxRef,
-    expandLinks,
-    removeEmptyLines,
-    truncateString,
-    createChoicesFromTitles,
-    convertEmojiTags,
-} from 'mdnman';
+import { SlashCommandBuilder } from 'discord.js';
+import { javascriptTitles, createChoicesFromTitles } from 'mdnman';
 import { queryAutocompleteHandler, sectionAutocompleteHandler } from '../../autocomplete.js';
+import { referenceCommandExecutor } from './utils.js';
 
 const choices = createChoicesFromTitles(javascriptTitles);
 
@@ -45,32 +34,6 @@ export default {
         }
     },
     async execute(interaction) {
-        const options = interaction.options._hoistedOptions;
-        const filepath = options.find((obj) => obj.name === 'query').value;
-        const section = options.find((obj) => obj.name === 'section').value;
-
-        if (!filepath || !section) {
-            console.error(
-                `No filepath or section provided! Filepath: ${filepath}, Section: ${section}`
-            );
-            await interaction.reply();
-            return;
-        }
-
-        const file = getMDNFile(filepath);
-        const document = getSection(file, section);
-        const header = getHeader(file);
-
-        const strippedDoc = removeEmptyLines(
-            removeEmptySections(convertEmojiTags(expandLinks(stripJsxRef(document))))
-        );
-
-        const embed = new EmbedBuilder()
-            .setColor(0x3170d6)
-            .setTitle(header.title)
-            .setURL(`https://developer.mozilla.org/en-US/docs/${header.slug}`)
-            .setDescription(truncateString(strippedDoc, 1024));
-
-        await interaction.reply({ embeds: [embed] });
+        await referenceCommandExecutor(interaction);
     },
 };
