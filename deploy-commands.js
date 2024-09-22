@@ -38,7 +38,7 @@ try {
     await rest.put(Routes.applicationCommands(process.env.CLIENT_ID), { body: commands });
     Logger.log({
         level: 'info',
-        message: 'Successfully reloaded application (/) commands.',
+        message: '🟢 Successfully reloaded application slash commands.',
     });
 } catch (error) {
     Logger.log({

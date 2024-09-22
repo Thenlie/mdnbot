@@ -8,5 +8,5 @@ export const Logger = winston.createLogger({
         new winston.transports.Console(),
         new winston.transports.File({ filename: 'mdnbot.log' }),
     ],
-    format: combine(timestamp(), prettyPrint()),
+    format: combine(timestamp({ format: 'HH:mm:ss.SSS - ddd. MMM Do, YYYY' }), prettyPrint()),
 });

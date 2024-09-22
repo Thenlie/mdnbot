@@ -34,7 +34,7 @@ for (const folder of commandFolders) {
 client.on('ready', () => {
     Logger.log({
         level: 'info',
-        message: `🟢 NEW BOT SESSION STARTED 🟢 Logged in as ${client.user.tag}!`,
+        message: `🟢 Logged in as ${client.user.tag}!`,
     });
 });
 
