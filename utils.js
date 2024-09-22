@@ -11,10 +11,11 @@ import {
     removeEmptyLines,
     truncateString,
 } from 'mdnman';
+import { Logger } from './logger.js';
 
 /**
- * Function that runs to execute each reference command.
- * This runs for javascript, html and css so make sure changes are language agnostic.
+ * Executes each reference command. This runs for javascript, html and css
+ * so make sure changes are language agnostic.
  */
 const referenceCommandExecutor = async (interaction) => {
     const options = interaction.options._hoistedOptions;
@@ -22,9 +23,10 @@ const referenceCommandExecutor = async (interaction) => {
     const section = options.find((obj) => obj.name === 'section').value;
 
     if (!filepath || !section) {
-        console.error(
-            `No filepath or section provided! Filepath: ${filepath}, Section: ${section}`
-        );
+        Logger.log({
+            level: 'error',
+            message: `No filepath or section provided! Filepath: ${filepath}, Section: ${section}`,
+        });
         await interaction.reply();
         return;
     }
@@ -35,7 +37,10 @@ const referenceCommandExecutor = async (interaction) => {
         const newFilePath = getPathFromTitle(filepath, 'javascript');
         file = getMDNFile(newFilePath);
         if (!file) {
-            console.error(`No file found for query "${filepath}"`);
+            Logger.log({
+                level: 'error',
+                message: `No file found for query "${filepath}"`,
+            });
             await interaction.reply();
             return;
         }

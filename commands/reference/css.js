@@ -1,7 +1,7 @@
 import { SlashCommandBuilder } from 'discord.js';
 import { cssTitles, createChoicesFromTitles } from 'mdnman';
 import { queryAutocompleteHandler, sectionAutocompleteHandler } from '../../autocomplete.js';
-import { referenceCommandExecutor } from './utils.js';
+import { referenceCommandExecutor } from '../../utils.js';
 
 const choices = createChoicesFromTitles(cssTitles);
 

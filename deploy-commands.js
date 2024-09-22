@@ -3,6 +3,7 @@ import { REST, Routes } from 'discord.js';
 import fs from 'node:fs';
 import path, { dirname } from 'node:path';
 import { fileURLToPath } from 'url';
+import { Logger } from './logger.js';
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = dirname(__filename);
@@ -23,9 +24,10 @@ for (const folder of commandFolders) {
         if ('data' in command.default && 'execute' in command.default) {
             commands.push(command.default.data.toJSON());
         } else {
-            console.log(
-                `[WARNING] The command at ${filePath} is missing a required "data" or "execute" property.`
-            );
+            Logger.log({
+                level: 'info',
+                message: `[WARNING] The command at ${filePath} is missing a required "data" or "execute" property.`,
+            });
         }
     }
 }
@@ -33,11 +35,14 @@ for (const folder of commandFolders) {
 const rest = new REST({ version: '10' }).setToken(process.env.TOKEN);
 
 try {
-    console.log('Started refreshing application (/) commands.');
-
     await rest.put(Routes.applicationCommands(process.env.CLIENT_ID), { body: commands });
-
-    console.log('Successfully reloaded application (/) commands.');
+    Logger.log({
+        level: 'info',
+        message: 'Successfully reloaded application (/) commands.',
+    });
 } catch (error) {
-    console.error(error);
+    Logger.log({
+        level: 'error',
+        message: error,
+    });
 }

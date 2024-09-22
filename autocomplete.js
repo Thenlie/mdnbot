@@ -1,4 +1,5 @@
 import { getAllSections, getMDNFile, removeEmptySections } from 'mdnman';
+import { Logger } from './logger.js';
 
 export const queryAutocompleteHandler = async (interaction, choices) => {
     const focusedValue = interaction.options.getFocused().toLowerCase();
@@ -19,7 +20,10 @@ export const sectionAutocompleteHandler = async (interaction) => {
     const options = interaction.options._hoistedOptions;
     const filepath = options.find((obj) => obj.name === 'query').value;
     if (!filepath) {
-        console.error('No filepath in autocomplete');
+        Logger.log({
+            level: 'error',
+            message: 'No filepath in autocomplete',
+        });
     }
     const file = getMDNFile(filepath);
     const sections = getAllSections(removeEmptySections(file));
