@@ -43,6 +43,6 @@ try {
 } catch (error) {
     Logger.log({
         level: 'error',
-        message: error,
+        message: `[deployCommands] ${error}`,
     });
 }

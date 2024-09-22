@@ -47,7 +47,7 @@ client.on(Events.InteractionCreate, async (interaction) => {
     if (!command) {
         Logger.log({
             level: 'error',
-            message: `No command matching ${interaction.commandName} was found.`,
+            message: `[commandHandler] No command matching ${interaction.commandName} was found.`,
         });
         return;
     }
@@ -57,16 +57,16 @@ client.on(Events.InteractionCreate, async (interaction) => {
     } catch (error) {
         Logger.log({
             level: 'error',
-            message: error,
+            message: `[commandHandler] ${error}`,
         });
         if (interaction.replied || interaction.deferred) {
             await interaction.followUp({
-                content: 'There was an error while executing this command!',
+                content: '[commandHandler] There was an error while executing this command!',
                 ephemeral: true,
             });
         } else {
             await interaction.reply({
-                content: 'There was an error while executing this command!',
+                content: '[commandHandler] There was an error while executing this command!',
                 ephemeral: true,
             });
         }
@@ -81,7 +81,7 @@ client.on(Events.InteractionCreate, async (interaction) => {
     if (!command) {
         Logger.log({
             level: 'error',
-            message: `No command matching ${interaction.commandName} was found.`,
+            message: `[autocompleteHandler] No command matching ${interaction.commandName} was found.`,
         });
         return;
     }
@@ -91,7 +91,7 @@ client.on(Events.InteractionCreate, async (interaction) => {
     } catch (error) {
         Logger.log({
             level: 'error',
-            message: `Error in autocomplete! ${error}`,
+            message: `[autocompleteHandler] ${error}`,
         });
     }
 });

@@ -1,4 +1,10 @@
-import { getAllSections, getMDNFile, removeEmptySections, getPathFromTitle } from 'mdnman';
+import {
+    getAllSections,
+    getMDNFile,
+    removeEmptySections,
+    getPathFromTitle,
+    stripJsxRef,
+} from 'mdnman';
 import { Logger } from './logger.js';
 
 export const queryAutocompleteHandler = async (interaction, choices) => {
@@ -49,7 +55,7 @@ export const sectionAutocompleteHandler = async (interaction) => {
     );
     // Truncate filtered  array to length of 25 per discord's limit
     const response = filteredSections.slice(0, 24).map((section) => ({
-        name: section.name,
+        name: stripJsxRef(section.name.slice(0, 99)),
         value: section.name,
     }));
     await interaction.respond(response);
