@@ -1,9 +1,19 @@
-import { EmbedBuilder, SlashCommandBuilder } from 'discord.js';
+import { EmbedBuilder, SlashCommandBuilder, AttachmentBuilder } from 'discord.js';
 
-const description =
-    "The MDN Bot is a discord bot that is capable of querying the MDN Web docs and returning sections of those docs to users on discord. It is intended to be used as a reference tool for web developers and as utility for community support members to easily share documentation and example with people they are helping.\n\nCheck out the project on GitHub at https://github.com/Thenlie/mdnbot\nDon't forget to leave a ⭐";
+const attachment = new AttachmentBuilder('./assets/mdn_logo.jpg', { name: 'img.jpg' });
 
-const footer = 'Created By Thenlie, 2024';
+const description = `
+## About
+
+The MDN Bot is a discord bot that queries the MDN Web docs and returns sections of those docs to users on discord. It is intended to be used as a reference tool for web developers and as utility for community support members to easily share documentation and examples with people they are helping.
+
+Check out the project on [GitHub](https://github.com/Thenlie/mdnbot) and don't forget to leave a ⭐
+## Credits
+
+This project would not be possible without the incredible work done by the [Mozilla Team](https://github.com/mdn) on the [MDN Web Docs](https://developer.mozilla.org/en-US/).
+`;
+
+const footer = `Created By Thenlie, 2024. version ${process.env.npm_package_version}`;
 
 export default {
     data: new SlashCommandBuilder()
@@ -13,8 +23,9 @@ export default {
         const embed = new EmbedBuilder()
             .setColor(0x3170d6)
             .setDescription(description)
-            .setFooter({ text: footer });
+            .setThumbnail(`attachment://${attachment.name}`)
+            .setFooter({ text: footer, iconURL: 'https://imgur.com/NZTgw2m.png' });
 
-        await interaction.reply({ embeds: [embed] });
+        await interaction.reply({ embeds: [embed], files: [attachment] });
     },
 };

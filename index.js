@@ -57,16 +57,16 @@ client.on(Events.InteractionCreate, async (interaction) => {
     } catch (error) {
         Logger.log({
             level: 'error',
-            message: `[commandHandler] ${error}`,
+            message: `[commandHandler] ${JSON.stringify(error)}`,
         });
         if (interaction.replied || interaction.deferred) {
             await interaction.followUp({
-                content: '[commandHandler] There was an error while executing this command!',
+                content: 'There was an error while executing this command!',
                 ephemeral: true,
             });
         } else {
             await interaction.reply({
-                content: '[commandHandler] There was an error while executing this command!',
+                content: 'There was an error while executing this command!',
                 ephemeral: true,
             });
         }
@@ -91,7 +91,7 @@ client.on(Events.InteractionCreate, async (interaction) => {
     } catch (error) {
         Logger.log({
             level: 'error',
-            message: `[autocompleteHandler] ${error}`,
+            message: `[autocompleteHandler] ${JSON.stringify(error)}`,
         });
     }
 });
