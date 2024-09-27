@@ -34,7 +34,7 @@ const referenceCommandExecutor = async (interaction) => {
     let file = getMDNFile(filepath);
     // If not file is found with the given path, check if it is a unique title
     if (!file) {
-        const newFilePath = getPathFromTitle(filepath, 'javascript');
+        const newFilePath = getPathFromTitle(filepath, interaction.commandName);
         file = getMDNFile(newFilePath);
         if (!file) {
             Logger.log({
@@ -46,7 +46,8 @@ const referenceCommandExecutor = async (interaction) => {
         }
     }
 
-    const document = getSection(file, section);
+    const sectionObject = JSON.parse(section);
+    const document = getSection(file, sectionObject);
     const header = getHeader(file);
 
     const strippedDoc = removeEmptyLines(

@@ -23,6 +23,7 @@ export const queryAutocompleteHandler = async (interaction, choices) => {
 const SECTIONS_TO_REMOVE = ['See also', 'Browser compatibility', 'Specifications'];
 
 export const sectionAutocompleteHandler = async (interaction) => {
+    const focusedValue = interaction.options.getFocused().toLowerCase();
     const options = interaction.options._hoistedOptions;
     const filepath = options.find((obj) => obj.name === 'query').value;
     if (!filepath) {
@@ -50,13 +51,16 @@ export const sectionAutocompleteHandler = async (interaction) => {
     }
 
     const sections = getAllSections(removeEmptySections(file));
-    const filteredSections = sections.filter(
-        (section) => !SECTIONS_TO_REMOVE.includes(section.name)
-    );
+    const filteredSections = sections.filter((section) => {
+        if (SECTIONS_TO_REMOVE.includes(section.name)) return false;
+        if (section.name.toLowerCase().includes(focusedValue)) return true;
+        if (!focusedValue) return true;
+    });
     // Truncate filtered  array to length of 25 per discord's limit
+    let i = 1;
     const response = filteredSections.slice(0, 24).map((section) => ({
-        name: stripJsxRef(section.name.slice(0, 99)),
-        value: section.name,
+        name: `${'--'.repeat(focusedValue ? 0 : section.level - 2)} ${i++}. ${stripJsxRef(section.name.slice(0, 99))}`,
+        value: JSON.stringify(section),
     }));
     await interaction.respond(response);
 };
