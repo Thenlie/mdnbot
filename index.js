@@ -65,7 +65,7 @@ client.on(Events.InteractionCreate, async (interaction) => {
                 ephemeral: true,
             });
         } else {
-            await interaction.reply({
+            await interaction.deferReply({
                 content: 'There was an error while executing this command!',
                 ephemeral: true,
             });
