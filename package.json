@@ -1,5 +1,5 @@
 {
-  "name": "jsman_bot",
+  "name": "mdnbot",
   "type": "module",
   "version": "1.0.0",
   "description": "A discord bot that displays the MDN Web Docs on your server",
