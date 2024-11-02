@@ -19,7 +19,9 @@ import { Logger } from './logger.js';
  */
 const referenceCommandExecutor = async (interaction) => {
     const options = interaction.options._hoistedOptions;
-    const filepath = options.find((obj) => obj.name === 'query').value;
+    const query = options.find((obj) => obj.name === 'query').value;
+    const filepath =
+        interaction.commandName === 'javascript' ? 'lib/javascript/' + query + '/index.md' : query;
     const section = options.find((obj) => obj.name === 'section').value;
 
     if (!filepath || !section) {

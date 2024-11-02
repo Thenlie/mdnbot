@@ -25,7 +25,9 @@ const SECTIONS_TO_REMOVE = ['See also', 'Browser compatibility', 'Specifications
 export const sectionAutocompleteHandler = async (interaction) => {
     const focusedValue = interaction.options.getFocused().toLowerCase();
     const options = interaction.options._hoistedOptions;
-    const filepath = options.find((obj) => obj.name === 'query').value;
+    let query = options.find((obj) => obj.name === 'query').value;
+    const filepath =
+        interaction.commandName === 'javascript' ? 'lib/javascript/' + query + '/index.md' : query;
     if (!filepath) {
         Logger.log({
             level: 'error',

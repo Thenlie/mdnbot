@@ -1,9 +1,16 @@
 import { SlashCommandBuilder } from 'discord.js';
-import { javascriptTitles, createChoicesFromTitles } from 'mdnman';
+import { javascriptTitles } from 'mdnman';
 import { queryAutocompleteHandler, sectionAutocompleteHandler } from '../../autocomplete.js';
 import { referenceCommandExecutor } from '../../utils.js';
 
-const choices = createChoicesFromTitles(javascriptTitles);
+// Discord limits the value to 100 characters so we remove 'lib/javascript'
+// and '/index.md' from the path to ensure it fits this limit
+const choices = javascriptTitles.map((title) => {
+    return {
+        name: title.title,
+        value: title.path.substring(15, title.path.length - 9),
+    };
+});
 
 export default {
     data: new SlashCommandBuilder()
