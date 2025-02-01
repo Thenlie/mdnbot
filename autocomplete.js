@@ -6,6 +6,7 @@ import {
     stripJsxRef,
 } from 'mdnman';
 import { Logger } from './logger.js';
+import { hashString } from './utils.js';
 
 export const queryAutocompleteHandler = async (interaction, choices) => {
     const focusedValue = interaction.options.getFocused().toLowerCase();
@@ -58,11 +59,13 @@ export const sectionAutocompleteHandler = async (interaction) => {
         if (section.name.toLowerCase().includes(focusedValue)) return true;
         if (!focusedValue) return true;
     });
+
     // Truncate filtered  array to length of 25 per discord's limit
     let i = 1;
     const response = filteredSections.slice(0, 24).map((section) => ({
         name: `${'--'.repeat(focusedValue ? 0 : section.level - 2)} ${i++}. ${stripJsxRef(section.name.slice(0, 99))}`,
-        value: JSON.stringify(section),
+        value: hashString(JSON.stringify(section)),
     }));
+
     await interaction.respond(response);
 };

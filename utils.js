@@ -10,8 +10,14 @@ import {
     stripJsxRef,
     removeEmptyLines,
     truncateString,
+    getAllSections,
 } from 'mdnman';
 import { Logger } from './logger.js';
+import { createHash } from 'crypto';
+
+const hashString = (str) => {
+    return createHash('sha1').update(str).digest('hex');
+};
 
 /**
  * Executes each reference command. This runs for javascript, html and css
@@ -22,12 +28,12 @@ const referenceCommandExecutor = async (interaction) => {
     const query = options.find((obj) => obj.name === 'query').value;
     const filepath =
         interaction.commandName === 'javascript' ? 'lib/javascript/' + query + '/index.md' : query;
-    const section = options.find((obj) => obj.name === 'section').value;
+    const hashedSection = options.find((obj) => obj.name === 'section').value;
 
-    if (!filepath || !section) {
+    if (!filepath || !hashedSection) {
         Logger.log({
             level: 'error',
-            message: `[referenceCommandExecutor] No filepath or section provided! Filepath: ${filepath}, Section: ${section}`,
+            message: `[referenceCommandExecutor] No filepath or section provided! Filepath: ${filepath}, Section hash: ${hashedSection}`,
         });
         await interaction.reply();
         return;
@@ -48,7 +54,9 @@ const referenceCommandExecutor = async (interaction) => {
         }
     }
 
-    const sectionObject = JSON.parse(section);
+    const sections = getAllSections(removeEmptySections(file));
+    const sectionObject = sections.find((s) => hashString(JSON.stringify(s)) === hashedSection);
+
     const document = getSection(file, sectionObject);
     const header = getHeader(file);
 
@@ -66,4 +74,4 @@ const referenceCommandExecutor = async (interaction) => {
     await interaction.reply({ embeds: [embed] });
 };
 
-export { referenceCommandExecutor };
+export { referenceCommandExecutor, hashString };
