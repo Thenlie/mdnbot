@@ -14,9 +14,11 @@ export const queryAutocompleteHandler = async (interaction, choices) => {
     const filtered = choices.filter((choice) =>
         focusedValues.every((value) => choice.name.toLowerCase().includes(value))
     );
-    // Truncate filtered  array to length of 25 per discord's limit
-    const response = filtered.slice(0, 24).map((choice) => {
-        return { name: choice.name.slice(0, 99), value: choice.value };
+    // Truncate displayed name to 100 characters per Discord's limit
+    // Truncate response to length of 25 per Discord's limit
+    const response = filtered.slice(0, 25).map((choice, i) => {
+        const sliceVal = 97 - String(i).length; // 97 accounts for the '. '
+        return { name: i + 1 + '. ' + choice.name.slice(0, sliceVal), value: choice.value };
     });
     await interaction.respond(response);
 };
