@@ -6,11 +6,10 @@ import {
     getHeader,
     removeEmptySections,
     convertEmojiTags,
-    expandLinks,
-    stripJsxRef,
     removeEmptyLines,
     truncateString,
     getAllSections,
+    completeParse,
 } from 'mdnman';
 import { Logger } from './logger.js';
 import { createHash } from 'crypto';
@@ -60,10 +59,10 @@ const referenceCommandExecutor = async (interaction) => {
     const document = getSection(file, sectionObject);
     const header = getHeader(file);
 
-    // Replacing level 4 headers with level 3 since Discord doesn't render level 4
-    const strippedDoc = removeEmptyLines(
-        removeEmptySections(convertEmojiTags(expandLinks(stripJsxRef(document))))
-    ).replace(/^####/gm, '###');
+    const strippedDoc = removeEmptyLines(completeParse(convertEmojiTags(document)))
+        // Replacing level 4 headers with level 3 since Discord doesn't render level 4
+        .replace(/^####/gm, '###')
+        .replaceAll('js-nolint', 'js');
 
     const embed = new EmbedBuilder()
         .setColor(0x3170d6)

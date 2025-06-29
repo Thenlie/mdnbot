@@ -1,6 +1,7 @@
 import { EmbedBuilder, SlashCommandBuilder, AttachmentBuilder } from 'discord.js';
 
-const attachment = new AttachmentBuilder('./assets/mdn_logo.jpg', { name: 'img.jpg' });
+const logoAttachment = new AttachmentBuilder('./assets/mdn_logo.jpg', { name: 'img.jpg' });
+const wizAttachment = new AttachmentBuilder('./assets/cheech_wiz.png', { name: 'img.png' });
 
 const description = `
 ## About
@@ -23,9 +24,9 @@ export default {
         const embed = new EmbedBuilder()
             .setColor(0x3170d6)
             .setDescription(description)
-            .setThumbnail(`attachment://${attachment.name}`)
-            .setFooter({ text: footer, iconURL: 'https://imgur.com/NZTgw2m.png' });
+            .setThumbnail(`attachment://${logoAttachment.name}`)
+            .setFooter({ text: footer, iconURL: `attachment://${wizAttachment.name}` });
 
-        await interaction.reply({ embeds: [embed], files: [attachment] });
+        await interaction.reply({ embeds: [embed], files: [logoAttachment, wizAttachment] });
     },
 };

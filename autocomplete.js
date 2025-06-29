@@ -3,7 +3,7 @@ import {
     getMDNFile,
     removeEmptySections,
     getPathFromTitle,
-    stripJsxRef,
+    transformKumascript,
 } from 'mdnman';
 import { Logger } from './logger.js';
 import { hashString } from './utils.js';
@@ -65,7 +65,7 @@ export const sectionAutocompleteHandler = async (interaction) => {
     // Truncate filtered  array to length of 25 per discord's limit
     let i = 1;
     const response = filteredSections.slice(0, 24).map((section) => ({
-        name: `${'--'.repeat(focusedValue ? 0 : section.level - 2)} ${i++}. ${stripJsxRef(section.name.slice(0, 99))}`,
+        name: `${'--'.repeat(focusedValue ? 0 : section.level - 2)} ${i++}. ${transformKumascript(section.name.slice(0, 99))}`,
         value: hashString(JSON.stringify(section)),
     }));
 
