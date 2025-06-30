@@ -1,5 +1,5 @@
 import 'dotenv/config';
-import { Client, GatewayIntentBits, Collection, Events } from 'discord.js';
+import { Client, GatewayIntentBits, Collection, Events, MessageFlags } from 'discord.js';
 import fs from 'node:fs';
 import path, { dirname } from 'node:path';
 import { fileURLToPath } from 'url';
@@ -57,18 +57,21 @@ client.on(Events.InteractionCreate, async (interaction) => {
     } catch (error) {
         Logger.log({
             level: 'error',
-            message: `[commandHandler] ${JSON.stringify(error)}`,
+            message: `[commandHandler] ${error}`,
         });
         if (interaction.replied || interaction.deferred) {
             await interaction.followUp({
                 content: 'There was an error while executing this command!',
-                ephemeral: true,
+                flags: MessageFlags.Ephemeral,
             });
         } else {
             await interaction.deferReply({
                 content: 'There was an error while executing this command!',
-                ephemeral: true,
+                flags: MessageFlags.Ephemeral,
             });
+            await interaction.editReply(`
+                There was an error while executing this command!\nFeel free to submit a bug report at https://github.com/Thenlie/mdnbot/issues.\nPath: \`${interaction.options._hoistedOptions[0].value}\`\nSection: \`${interaction.options._hoistedOptions[1].value}\`
+            `);
         }
     }
 });

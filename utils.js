@@ -9,6 +9,7 @@ import {
     truncateString,
     getAllSections,
     completeParse,
+    transformKumascript,
 } from 'mdnman';
 import { Logger } from './logger.js';
 import { createHash } from 'crypto';
@@ -83,9 +84,8 @@ const referenceCommandExecutor = async (interaction) => {
         }
     }
 
-    const sections = getAllSections(removeEmptySections(file));
+    const sections = getAllSections(removeEmptySections(transformKumascript(file)));
     const sectionObject = sections.find((s) => hashString(JSON.stringify(s)) === hashedSection);
-
     const document = getSection(file, sectionObject);
     const header = getHeader(file);
 
@@ -102,7 +102,7 @@ const referenceCommandExecutor = async (interaction) => {
         .setColor(0x3170d6)
         .setTitle(header.title)
         .setURL(
-            `https://developer.mozilla.org/en-US/docs/${header.slug}#${sectionObject.name.toLowerCase().replace(' ', '_')}`
+            `https://developer.mozilla.org/en-US/docs/${header.slug}#${sectionObject.name.toLowerCase().replaceAll(' ', '_')}`
         )
         .setDescription(truncateString(finalDoc, 1024));
 

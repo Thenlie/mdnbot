@@ -55,7 +55,8 @@ export const sectionAutocompleteHandler = async (interaction) => {
         }
     }
 
-    const sections = getAllSections(removeEmptySections(file));
+    // Transform Kumascript first so sections with only a Kumascript macro are removed
+    const sections = getAllSections(removeEmptySections(transformKumascript(file)));
     const filteredSections = sections.filter((section) => {
         if (SECTIONS_TO_REMOVE.includes(section.name)) return false;
         if (section.name.toLowerCase().includes(focusedValue)) return true;
