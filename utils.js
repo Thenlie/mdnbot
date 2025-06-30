@@ -6,7 +6,6 @@ import {
     getHeader,
     removeEmptySections,
     convertEmojiTags,
-    removeEmptyLines,
     truncateString,
     getAllSections,
     completeParse,
@@ -16,6 +15,37 @@ import { createHash } from 'crypto';
 
 const hashString = (str) => {
     return createHash('sha1').update(str).digest('hex');
+};
+
+/**
+ * Remove HTML tables that are not within a codeblock
+ * and insert a message explaining tables are not supported
+ */
+const removeHtmlTable = (document) => {
+    const newDoc = [];
+    const docArr = document.split('\n');
+
+    let inTable = false;
+    let inCodeblock = false;
+    docArr.forEach((line) => {
+        if (line.startsWith('```') && !inCodeblock) {
+            inCodeblock = true;
+            newDoc.push(line);
+        } else if (line.startsWith('```') && inCodeblock) {
+            inCodeblock = false;
+            newDoc.push(line);
+        } else if (line.startsWith('<table') && !inCodeblock) {
+            inTable = true;
+        } else if (line.startsWith('</table>') && inTable) {
+            inTable = false;
+            newDoc.push(
+                "`🚧 HTML Table's are not yet supported in MDN Bot! 🚧\n🚧 View the table on the MDN website by clicking the title 🚧`"
+            );
+        } else if (!inTable) {
+            newDoc.push(line);
+        }
+    });
+    return newDoc.join('\n');
 };
 
 /**
@@ -59,18 +89,24 @@ const referenceCommandExecutor = async (interaction) => {
     const document = getSection(file, sectionObject);
     const header = getHeader(file);
 
-    const strippedDoc = removeEmptyLines(completeParse(convertEmojiTags(document)))
-        // Replacing level 4 headers with level 3 since Discord doesn't render level 4
+    const strippedDoc = completeParse(convertEmojiTags(removeHtmlTable(document)));
+    const finalDoc = strippedDoc
+        // Replace level 4 headers with level 3 since Discord doesn't render level 4
         .replace(/^####/gm, '###')
-        .replaceAll('js-nolint', 'js');
+        // Remove consecutive spaces
+        .replace(/ {2,}/g, ' ')
+        // Shorten consecutive hyphens
+        .replace(/-{5,}/g, '----');
 
     const embed = new EmbedBuilder()
         .setColor(0x3170d6)
         .setTitle(header.title)
-        .setURL(`https://developer.mozilla.org/en-US/docs/${header.slug}`)
-        .setDescription(truncateString(strippedDoc, 1024));
+        .setURL(
+            `https://developer.mozilla.org/en-US/docs/${header.slug}#${sectionObject.name.toLowerCase().replace(' ', '_')}`
+        )
+        .setDescription(truncateString(finalDoc, 1024));
 
     await interaction.reply({ embeds: [embed] });
 };
 
-export { referenceCommandExecutor, hashString };
+export { referenceCommandExecutor, hashString, removeHtmlTable };
