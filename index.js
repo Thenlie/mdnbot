@@ -94,7 +94,7 @@ client.on(Events.InteractionCreate, async (interaction) => {
     } catch (error) {
         Logger.log({
             level: 'error',
-            message: `[autocompleteHandler] ${JSON.stringify(error)}`,
+            message: `[autocompleteHandler] ${error}`,
         });
     }
 });

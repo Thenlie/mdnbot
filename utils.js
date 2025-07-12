@@ -10,12 +10,24 @@ import {
     getAllSections,
     completeParse,
     transformKumascript,
+    getIntroSection,
 } from 'mdnman';
 import { Logger } from './logger.js';
 import { createHash } from 'crypto';
 
 const hashString = (str) => {
     return createHash('sha1').update(str).digest('hex');
+};
+
+const removeBrokenMarkdownLink = (text) => {
+    // Regex to match an incomplete image markdown link at the end of the string
+    const brokenLinkPattern = /!?\[.*?\]\([^)]*$/;
+
+    // If there's a match at the end, remove it
+    if (brokenLinkPattern.test(text)) {
+        return text.replace(brokenLinkPattern, '...').trim();
+    }
+    return text;
 };
 
 /**
@@ -58,7 +70,8 @@ const referenceCommandExecutor = async (interaction) => {
     const query = options.find((obj) => obj.name === 'query').value;
     const filepath =
         interaction.commandName === 'javascript' ? 'lib/javascript/' + query + '/index.md' : query;
-    const hashedSection = options.find((obj) => obj.name === 'section').value;
+    const sectionChoice = options.find((obj) => obj.name === 'section');
+    const hashedSection = sectionChoice.value;
 
     if (!filepath || !hashedSection) {
         Logger.log({
@@ -86,17 +99,28 @@ const referenceCommandExecutor = async (interaction) => {
 
     const sections = getAllSections(removeEmptySections(transformKumascript(file)));
     const sectionObject = sections.find((s) => hashString(JSON.stringify(s)) === hashedSection);
-    const document = getSection(file, sectionObject);
+    const section =
+        sectionObject.name === 'Introduction'
+            ? getIntroSection(file)
+            : getSection(file, sectionObject);
     const header = getHeader(file);
-
-    const strippedDoc = completeParse(convertEmojiTags(removeHtmlTable(document)));
-    const finalDoc = strippedDoc
+    const parsedSection = completeParse(convertEmojiTags(removeHtmlTable(section)), header.slug);
+    const formattedSection = parsedSection
         // Replace level 4 headers with level 3 since Discord doesn't render level 4
         .replace(/^####/gm, '###')
         // Remove consecutive spaces
         .replace(/ {2,}/g, ' ')
         // Shorten consecutive hyphens
-        .replace(/-{5,}/g, '----');
+        .replace(/-{5,}/g, '----')
+        // Add a space to empty block quotes
+        .replace('>\n', '> \n')
+        // Style Deprecation notice
+        .replace(
+            'Deprecated: This feature is no longer recommended',
+            '```diff\n- Deprecated: This feature is no longer recommended\n```'
+        );
+
+    const finalSection = truncateString(formattedSection, 1024);
 
     const embed = new EmbedBuilder()
         .setColor(0x3170d6)
@@ -104,7 +128,7 @@ const referenceCommandExecutor = async (interaction) => {
         .setURL(
             `https://developer.mozilla.org/en-US/docs/${header.slug}#${sectionObject.name.toLowerCase().replaceAll(' ', '_')}`
         )
-        .setDescription(truncateString(finalDoc, 1024));
+        .setDescription(removeBrokenMarkdownLink(finalSection));
 
     await interaction.reply({ embeds: [embed] });
 };
