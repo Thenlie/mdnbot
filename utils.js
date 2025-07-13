@@ -97,7 +97,7 @@ const referenceCommandExecutor = async (interaction) => {
         }
     }
 
-    const sections = getAllSections(removeEmptySections(transformKumascript(file)));
+    const sections = getAllSections(file);
     const sectionObject = sections.find((s) => hashString(JSON.stringify(s)) === hashedSection);
     const section =
         sectionObject.name === 'Introduction'
