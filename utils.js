@@ -113,7 +113,7 @@ const referenceCommandExecutor = async (interaction) => {
         // Shorten consecutive hyphens
         .replace(/-{5,}/g, '----')
         // Add a space to empty block quotes
-        .replace('>\n', '> \n')
+        .replaceAll('>\n', '> \n')
         // Style Deprecation notice
         .replace(
             'Deprecated: This feature is no longer recommended',
