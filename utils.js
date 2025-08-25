@@ -4,12 +4,10 @@ import {
     getPathFromTitle,
     getSection,
     getHeader,
-    removeEmptySections,
     convertEmojiTags,
     truncateString,
     getAllSections,
     completeParse,
-    transformKumascript,
     getIntroSection,
 } from 'mdnman';
 import { Logger } from './logger.js';
@@ -109,7 +107,7 @@ const referenceCommandExecutor = async (interaction) => {
         // Replace level 4 headers with level 3 since Discord doesn't render level 4
         .replace(/^####/gm, '###')
         // Remove consecutive spaces
-        .replace(/ {2,}/g, ' ')
+        .replace(/ {2,}(?!-)/g, ' ')
         // Shorten consecutive hyphens
         .replace(/-{5,}/g, '----')
         // Add a space to empty block quotes
